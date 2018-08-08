@@ -274,6 +274,13 @@
             <id>enforce-java</id>
           </execution>
         </executions>
+        <dependencies>
+          <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-component-annotations</artifactId>
+            <version>1.7.1</version>
+          </dependency>
+        </dependencies>
       </plugin>
     </plugins>
   </build>
