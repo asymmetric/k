@@ -2,10 +2,19 @@
 { pkgs ? import <nixpkgs> { inherit system; }
 , system ? builtins.currentSystem
 , mavenix ? pkgs.callPackage (import ./mavenix.nix) {}
-, src ? builtins.filterSource (path: type: baseNameOf != "target") ../.
 , doCheck ? false
-}: with pkgs; mavenix {
-  inherit doCheck src;
+}: with pkgs;
+let
+  gitignore = import (fetchFromGitHub {
+    owner = "siers";
+    repo = "nix-gitignore";
+    rev = "7a2a637fa4a753a9ca11f60eab52b35241ee3c2f";
+    sha256 = "0hrins85jz521nikmrmsgrz8nqawj52j6abxfcwjy38rqixcw8y1";
+  }) { inherit lib; };
+in mavenix {
+  inherit doCheck;
+
+  src = gitignore.gitignoreSource ../.;
   name = "k";
   infoFile = ./mavenix-info.json;
   buildInputs = [ git makeWrapper ];
@@ -22,6 +31,7 @@
   };
   postInstall = ''
     cp -r k-distribution/target/release/k/{bin,include,lib} $out/
+
     for prog in $out/bin/*; do
       wrapProgram $prog \
         --prefix PATH : ${lib.makeBinPath [
