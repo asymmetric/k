@@ -43,6 +43,14 @@ in mavenix {
     "runtime.verification.snapshots" = "https://s3.amazonaws.com/repo.runtime.verification/repository/snapshots";
   };
 
+  postPatch = ''
+    for file in k-distribution/src/main/scripts/{bin,lib}/*; do
+      [ -f $file ] && substituteInPlace $file \
+        --replace "/usr/bin/env sh"   ${bash}/bin/sh \
+        --replace "/usr/bin/env bash" ${bash}/bin/bash
+    done
+  '';
+
   postInstall = ''
     cp -r k-distribution/target/release/k/{bin,include,lib} $out/
 
