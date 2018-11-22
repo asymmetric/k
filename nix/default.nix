@@ -11,16 +11,16 @@
 }: with pkgs;
 
 let
-  gitignore = import (fetchFromGitHub {
+  gitignore = callPackage (fetchFromGitHub {
     owner   = "siers";
     repo    = "nix-gitignore";
-    rev     = "7a2a637fa4a753a9ca11f60eab52b35241ee3c2f";
-    sha256  = "0hrins85jz521nikmrmsgrz8nqawj52j6abxfcwjy38rqixcw8y1";
-  }) { inherit lib; };
+    rev     = "221d4aea15b4b7cc957977867fd1075b279837b3";
+    sha256  = "0xgxzjazb6qzn9y27b2srsp2h9pndjh3zjpbxpmhz0awdi7h8y9m";
+  }) { };
 in mavenix {
   inherit doCheck;
 
-  src         = gitignore.gitignoreSource ../.;
+  src         = gitignore.gitignoreSource [] ../.;
   name        = "k";
   infoFile    = ./mavenix-info.json;
   buildInputs = [ git makeWrapper ];
