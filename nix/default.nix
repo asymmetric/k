@@ -10,17 +10,10 @@
   doCheck ? false,
 }: with pkgs;
 
-let
-  gitignore = callPackage (fetchFromGitHub {
-    owner   = "siers";
-    repo    = "nix-gitignore";
-    rev     = "221d4aea15b4b7cc957977867fd1075b279837b3";
-    sha256  = "0xgxzjazb6qzn9y27b2srsp2h9pndjh3zjpbxpmhz0awdi7h8y9m";
-  }) { };
-in mavenix {
+mavenix {
   inherit doCheck;
 
-  src         = gitignore.gitignoreSource [] ../.;
+  src         = ../.;
   name        = "k";
   infoFile    = ./mavenix-info.json;
   buildInputs = [ git makeWrapper ];
